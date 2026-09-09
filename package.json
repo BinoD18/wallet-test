@@ -1,0 +1,33 @@
+{
+  "name": "laflhai-wallet-service",
+  "version": "0.1.0",
+  "description": "Backend wallet/ledger + ProviderRouter + CinetPay + eSIM/satellite pour LAFLHAI",
+  "main": "dist/index.js",
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "scripts": {
+    "dev": "tsx watch src/index.ts",
+    "build": "tsc -p tsconfig.json",
+    "start": "node dist/index.js",
+    "migrate": "node -e \"require('dotenv').config(); const {Pool}=require('pg'); const fs=require('fs'); const p=new Pool({connectionString:process.env.DATABASE_URL}); p.query(fs.readFileSync('./sql/schema.sql','utf8')).then(()=>{console.log('Migration OK');process.exit(0)}).catch(e=>{console.error(e);process.exit(1)})\"",
+    "seed": "node -e \"require('dotenv').config(); const {Pool}=require('pg'); const fs=require('fs'); const p=new Pool({connectionString:process.env.DATABASE_URL}); p.query(fs.readFileSync('./sql/seed.sql','utf8')).then(()=>{console.log('Seed OK');process.exit(0)}).catch(e=>{console.error(e);process.exit(1)})\""
+  },
+  "dependencies": {
+    "express": "^4.19.2",
+    "pg": "^8.12.0",
+    "dotenv": "^16.4.5",
+    "zod": "^3.23.8",
+    "node-cron": "^3.0.3",
+    "pino": "^9.3.2",
+    "pino-http": "^10.2.0"
+  },
+  "devDependencies": {
+    "typescript": "^5.5.4",
+    "tsx": "^4.16.2",
+    "@types/express": "^4.17.21",
+    "@types/node": "^20.14.15",
+    "@types/node-cron": "^3.0.11",
+    "@types/pg": "^8.11.6"
+  }
+}

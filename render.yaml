@@ -1,0 +1,48 @@
+services:
+  - type: web
+    name: laflhai-wallet-service
+    runtime: node
+    plan: free            # passe à "starter" ou plus pour éviter la mise en veille en prod
+    region: frankfurt      # région la plus proche de la Côte d'Ivoire disponible sur Render
+    buildCommand: npm ci --include=dev && npm run build
+    startCommand: npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: DATABASE_URL
+        fromDatabase:
+          name: laflhai-wallet-db
+          property: connectionString
+      - key: PORT
+        value: 8090
+      - key: CINETPAY_ENV
+        value: sandbox     # passe à "production" avec les vraies clés une fois validé
+      - key: CINETPAY_API_KEY_CI
+        sync: false         # renseigné manuellement dans le dashboard Render (secret)
+      - key: CINETPAY_API_PASSWORD_CI
+        sync: false
+      - key: CINETPAY_SITE_ID_CI
+        sync: false
+      - key: CINETPAY_NOTIFY_URL
+        value: https://laflhai-wallet-service.onrender.com/webhooks/cinetpay
+      - key: CINETPAY_RETURN_URL
+        value: https://laflhailive.com/wallet/success
+      - key: CINETPAY_FAILED_URL
+        value: https://laflhailive.com/wallet/failed
+      - key: TWILIO_ACCOUNT_SID
+        sync: false
+      - key: TWILIO_AUTH_TOKEN
+        sync: false
+      - key: TELNYX_API_KEY
+        sync: false
+      - key: AFRICAS_TALKING_API_KEY
+        sync: false
+      - key: AFRICAS_TALKING_USERNAME
+        sync: false
+      - key: ADMIN_API_KEY
+        generateValue: true
+
+databases:
+  - name: laflhai-wallet-db
+    plan: free            # passe à un plan payant avant la vraie prod (le free expire après 90 jours)
+    region: frankfurt
