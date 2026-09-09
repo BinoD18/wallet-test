@@ -18,10 +18,7 @@ app.use('/api', walletRouter)
 app.use('/api', ordersRouter)
 app.use('/api', esimRouter)
 app.use('/api', satelliteRouter)
-
-// paymentsRouter expose /payments/cinetpay/init (API) et /webhooks/cinetpay (notify_url CinetPay)
-// monté à la racine pour correspondre exactement à CINETPAY_NOTIFY_URL=https://api.laflhai.com/webhooks/cinetpay
-app.use('/', paymentsRouter)
+app.use('/api', paymentsRouter) // expose /api/payments/cinetpay/init et /api/webhooks/cinetpay
 
 const port = process.env.PORT ? Number(process.env.PORT) : 8090
 app.listen(port, () => {
